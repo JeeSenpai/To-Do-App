@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ToDoModule } from './to-do/to-do.module';
+import { ToDo } from './to-do/entities/to-do.entity';
 @Module({
   imports: [ConfigModule.forRoot(), TypeOrmModule.forRoot({
     type: 'mysql',
@@ -12,7 +13,7 @@ import { ToDoModule } from './to-do/to-do.module';
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
-    entities: [],
+    entities: [ToDo],
     synchronize: true,
   }), ToDoModule,
 ],
