@@ -41,11 +41,30 @@ export class ToDoService {
     return `This action returns a #${id} toDo`;
   }
 
-  update(id: number, updateToDoDto: UpdateToDoDto) {
-    return `This action updates a #${id} toDo`;
+  async update(id: number, updateToDoDto: UpdateToDoDto) {
+    try {
+      let formData = await this.todoRepository.update( id, { 
+          todo: updateToDoDto.todo
+      })
+
+      if(formData){
+        return {
+          msg: 'Updated.',
+          status: HttpStatus.ACCEPTED,
+        };
+      }
+      else{
+        return {
+          msg: 'Error',
+          status: HttpStatus.BAD_REQUEST,
+        };
+      }
+    } catch (error) {
+      return error
+    }
   }
 
   remove(id: number) {
-    return `This action removes a #${id} toDo`;
+    return this.todoRepository.delete({ id: id })
   }
 }

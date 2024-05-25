@@ -18,7 +18,7 @@ export default  async function bootstrap() {
         }
       },
         allowedHeaders: 'Origin,Authorization, X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
-        methods: "GET,POST,PUT,PATCH,UPDATE",
+        methods: "GET,POST,PUT,PATCH,UPDATE, DELETE",
         credentials: true,
     }
   });
