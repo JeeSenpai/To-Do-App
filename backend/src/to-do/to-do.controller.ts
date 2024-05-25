@@ -23,12 +23,12 @@ export class ToDoController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateToDoDto: UpdateToDoDto) {
-    return this.toDoService.update(+id, updateToDoDto);
+  update(@Param('id') id: number, @Body() updateToDoDto: UpdateToDoDto) {
+    return this.toDoService.update(id, updateToDoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.toDoService.remove(+id);
+  remove(@Param('id') id: number) {
+    return this.toDoService.remove(id);
   }
 }

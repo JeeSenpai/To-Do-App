@@ -28,12 +28,12 @@
 			</svg>
 			Read
 		</button>
-		<div v-for="d in data" :key="d" class="mx-20 my-1 p-4 border-1 border shadow-lg h-[100px] rounded-lg">
-			<span>{{ d.todo }}</span>
-			<button class="select-none inline-flex transition-colors hover:bg-yellow-400 hover:text-white whitespace-nowrap rounded-lg bg-gray-400/10 py-1.5 px-2 ml-20 my-5 text-xs text-gray-900 w-auto">
+		<div v-for="(d, index) in data" :key="index" class="mx-20 my-1 p-4 border-1 border shadow-lg h-[100px] rounded-lg">
+			<input class="p-2 border" type="text" v-model="d.todo" />
+			<button @click="editToDo(index)" class="select-none inline-flex transition-colors hover:bg-yellow-400 hover:text-white whitespace-nowrap rounded-lg bg-gray-400/10 py-1.5 px-2 ml-4 my-5 text-xs text-gray-900 w-auto">
 				Edit
 			</button>
-			<button class="select-none inline-flex transition-colors hover:bg-red-400 hover:text-white whitespace-nowrap rounded-lg bg-gray-400/10 py-1.5 px-2 ml-20 my-5 text-xs text-gray-900 w-auto">
+			<button @click="deleteToDo(d.id)" class="select-none inline-flex transition-colors hover:bg-red-400 hover:text-white whitespace-nowrap rounded-lg bg-gray-400/10 py-1.5 px-2 ml-4 my-5 text-xs text-gray-900 w-auto">
 				Delete
 			</button>
 		</div>
@@ -70,6 +70,26 @@ export default {
 				})
 			}
 		},
+		editToDo(index){
+			const id = this.data[index].id
+			const editedText = this.data[index].todo
+			let formData = {
+				todo: editedText
+			}
+			axios.patch(process.env.VUE_APP_SERVER_URL + '/to-do/' + id, formData).then((res)=>{
+				if(res.data.status == 202){
+					this.init()
+				}
+			})
+		},
+		deleteToDo(id){
+			console.log('hello')
+			axios.delete(process.env.VUE_APP_SERVER_URL + '/to-do/' + id).then((res)=>{
+				if(res){
+					this.init()
+				}
+			})
+		}
 	},
 	mounted(){
 		this.init()
