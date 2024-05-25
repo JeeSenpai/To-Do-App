@@ -1,15 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateToDoDto } from './dto/create-to-do.dto';
 import { UpdateToDoDto } from './dto/update-to-do.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ToDo } from './entities/to-do.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ToDoService {
-  create(createToDoDto: CreateToDoDto) {
-    return 'This action adds a new toDo';
+  constructor(@InjectRepository(ToDo) private readonly todoRepository: Repository<ToDo>) {}
+  
+  async create(createToDoDto: CreateToDoDto) {
+    try {
+      let formData = this.todoRepository.create({
+          todo: createToDoDto.todo
+      })
+
+      let save = await this.todoRepository.save(formData)
+      if(save){
+        return {
+          msg: 'Saved.',
+          status: HttpStatus.CREATED,
+        };
+      }
+      else{
+        return {
+          msg: 'Error',
+          status: HttpStatus.BAD_REQUEST,
+        };
+      }
+    } catch (error) {
+      return error
+    }
   }
 
   findAll() {
-    return `This action returns all toDo`;
+    return this.todoRepository.find()
   }
 
   findOne(id: number) {

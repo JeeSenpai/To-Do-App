@@ -12,8 +12,8 @@
 			</p> 
 
 			<div class="relative w-[300px] lg:w-[600px]">
-				<input type="text" placeholder="Add anything" class="px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 w-full">
-				<button class="absolute inset-y-0 right-0 px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none">Add</button>
+				<input v-model="todo" type="text" placeholder="Add anything" class="px-4 py-3 border border-gray-300 rounded-md text-sm focus:outline-none focus:border-blue-500 w-full">
+				<button @click="addToDo()" class="absolute inset-y-0 right-0 px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none">Add</button>
 			</div>
 			<!-- Main text end -->
 
@@ -28,16 +28,52 @@
 			</svg>
 			Read
 		</button>
-		<div class="mx-20 my-1 border-1 border shadow-lg h-[100px] rounded-lg">
-
+		<div v-for="d in data" :key="d" class="mx-20 my-1 p-4 border-1 border shadow-lg h-[100px] rounded-lg">
+			<span>{{ d.todo }}</span>
+			<button class="select-none inline-flex transition-colors hover:bg-yellow-400 hover:text-white whitespace-nowrap rounded-lg bg-gray-400/10 py-1.5 px-2 ml-20 my-5 text-xs text-gray-900 w-auto">
+				Edit
+			</button>
+			<button class="select-none inline-flex transition-colors hover:bg-red-400 hover:text-white whitespace-nowrap rounded-lg bg-gray-400/10 py-1.5 px-2 ml-20 my-5 text-xs text-gray-900 w-auto">
+				Delete
+			</button>
 		</div>
 	</section>
 	<!-- Main section end -->
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-
+	data(){
+		return {
+			data: [],
+			todo: null,
+		}
+	},
+	methods: {
+		init(){
+			axios.get(process.env.VUE_APP_SERVER_URL + '/to-do').then((res)=>{
+				if(res){
+					this.data = res.data
+				}
+			})
+		},
+		addToDo(){
+			if(this.todo || this.todo.trim() !== ''){
+				let formData = {
+					todo: this.todo
+				}
+				axios.post(process.env.VUE_APP_SERVER_URL + '/to-do', formData).then((res)=>{
+					if(res.data.status == 201){
+						this.init()
+					}
+				})
+			}
+		},
+	},
+	mounted(){
+		this.init()
+	}
 }
 </script>
 
