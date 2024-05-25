@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 
 export default  async function bootstrap() {
   
-  var whitelist = ["http://localhost:8080"];
+  var whitelist = ["http://localhost:8080", "https://to-do-app-test.vercel.app"];
   const app = await NestFactory.create(AppModule, {
     cors: {
       origin: function (origin, callback) {
