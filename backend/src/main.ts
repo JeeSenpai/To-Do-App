@@ -24,7 +24,7 @@ export default  async function bootstrap() {
   });
 
     const config = new DocumentBuilder()
-    .setTitle('Equinox')
+    .setTitle('To Do App')
     .setDescription('')
     .setVersion('1.0')
     .build();
